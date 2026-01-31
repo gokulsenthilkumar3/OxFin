@@ -306,5 +306,4 @@ This project is proprietary and confidential. All rights reserved.
   <a href="https://docs.oxfin.com">Documentation</a> •
   <a href="https://status.oxfin.com">Status</a> •
   <a href="https://careers.oxfin.com">Careers</a>
-</p>#   F i n a n c e - O x F i n  
- 
+</p>
