@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { ArrowRight, CheckCircle2, AlertCircle, Shield } from 'lucide-react';
+import { ArrowRight, Lock, Mail, User, Shield, Hexagon, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Button from '@/components/ui/Button';
@@ -12,6 +12,7 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
   // Form States
@@ -20,6 +21,12 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [mfaCode, setMfaCode] = useState('');
   const [mfaRequired, setMfaRequired] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const clearErrors = () => {
     setError('');
@@ -105,265 +112,285 @@ export default function AuthPage() {
     }
   };
 
-  const handleOAuth = (provider: string) => {
-    signIn(provider, { callbackUrl: '/dashboard' });
-  };
+  if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full flex bg-background">
-      {/* Left Side: 3D Abstract Visual / Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-950 overflow-hidden items-center justify-center p-12">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNk0yNCAzNmMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSAzLjMxLTYgMy4zMS02LTIuNjktNi02IDIuNjktNiA2LTYiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20" />
-
-        <div className="relative z-10 max-w-lg text-white space-y-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="flex items-center gap-5 mb-10">
-              <div className="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-3xl flex items-center justify-center text-white font-extrabold text-4xl border border-white/20 shadow-2xl relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <span className="relative z-10">O</span>
-              </div>
-              <span className="text-4xl font-extrabold tracking-tighter text-white">OxFin</span>
-            </div>
-            <h1 className="text-6xl font-extrabold mb-8 tracking-tighter leading-[1.1]">Financial intelligence<br /><span className="text-blue-400">reimagined.</span></h1>
-            <p className="text-xl text-blue-100/80 leading-relaxed font-medium">
-              Experience the future of wealth management. Zero friction, total clarity, and powerful insights designed for the modern investor.
-            </p>
-          </motion.div>
-
-          {/* Feature Pills */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 1 }}
-            className="flex flex-wrap gap-4 pt-4"
-          >
-            {['Swiss Grid System', 'Micro-Spring Physics', 'HSL Harmony'].map((item) => (
-              <div key={item} className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 backdrop-blur-lg border border-white/10 text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-white/10 transition-all cursor-default">
-                <CheckCircle2 size={14} className="text-emerald-400" />
-                {item}
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Abstract Visual Circles */}
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-[#030712] overflow-hidden selection:bg-blue-500/30">
+      {/* Animated Background Gradients map */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.4, 0.3],
+            transform: ['translate(0%, 0%) scale(1)', 'translate(5%, 10%) scale(1.1)', 'translate(-5%, -5%) scale(0.9)', 'translate(0%, 0%) scale(1)'],
           }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="absolute -bottom-48 -right-48 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[160px]"
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-blue-900/20 blur-[120px] mix-blend-screen"
         />
         <motion.div
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.2, 0.3, 0.2],
+            transform: ['translate(0%, 0%) scale(1)', 'translate(-10%, -10%) scale(1.2)', 'translate(5%, 5%) scale(0.8)', 'translate(0%, 0%) scale(1)'],
           }}
-          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
-          className="absolute -top-48 -left-48 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[140px]"
+          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+          className="absolute top-[10%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-indigo-900/20 blur-[130px] mix-blend-screen"
         />
+        <motion.div
+          animate={{
+            transform: ['translate(0%, 0%) scale(1)', 'translate(10%, -5%) scale(1.1)', 'translate(-10%, 10%) scale(0.9)', 'translate(0%, 0%) scale(1)'],
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
+          className="absolute -bottom-[20%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-violet-900/15 blur-[150px] mix-blend-screen"
+        />
+
+        {/* Subtle grid pattern overlay */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIwdi0yMHptLTIwIDBoMjB2MjBIMHYtMjB6IiBmaWxsPSIjMWUxZTFlIiBmaWxsLW9wYWNpdHk9IjAuMDUiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==')] opacity-30" />
       </div>
 
-      {/* Right Side: Login/Sign Up Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background relative overflow-hidden">
-        {/* Subtle noise pattern for the form side too */}
-        <div className="absolute inset-0 noise-overlay opacity-[0.03] pointer-events-none" />
+      <div className="relative z-10 w-full max-w-lg px-6 py-12 lg:py-20">
+        {/* Logo and Brand */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col items-center mb-12"
+        >
+          <div className="relative flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-500 shadow-2xl shadow-blue-500/30 mb-6 group">
+            <div className="absolute inset-0 rounded-3xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <Hexagon className="w-10 h-10 text-white absolute" strokeWidth={1.5} />
+            <span className="text-white font-bold text-2xl z-10">O</span>
+          </div>
+          <h1 style={{ color: '#fff', fontSize: '2.5rem', letterSpacing: '-0.025em', display: 'flex', alignItems: 'center', gap: '0.75rem' }} className="mb-2">
+            <span style={{ fontWeight: 800 }}>OxFin</span>
+            <span style={{ fontWeight: 400, opacity: 0.9 }}>Portal</span>
+          </h1>
+          <p className="mt-1 text-base text-slate-400 font-medium text-center">
+            The next generation of computational finance.
+          </p>
+        </motion.div>
 
-        <div className="w-full max-w-[440px] relative z-10">
-          {/* Form Card */}
-          <div className="card-swiss p-10 bg-white/95 border-slate-200/50">
-            {/* Mobile Branding */}
-            <div className="lg:hidden flex justify-center mb-10">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white font-extrabold text-2xl shadow-xl shadow-blue-500/20">
-                  O
-                </div>
-                <span className="text-3xl font-extrabold text-slate-900 tracking-tighter">OxFin</span>
-              </div>
-            </div>
-
-            {/* Toggle Tabs */}
-            <div className="bg-slate-100/80 p-1.5 rounded-2xl flex gap-1 mb-10 ring-1 ring-slate-200/50">
-              <button
-                onClick={() => { setIsLogin(true); clearErrors(); }}
-                className={cn(
-                  "flex-1 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-300",
-                  isLogin ? "bg-white text-primary shadow-lg shadow-black/5" : "text-slate-400 hover:text-slate-600"
-                )}
-              >
-                Log In
-              </button>
-              <button
-                onClick={() => { setIsLogin(false); clearErrors(); }}
-                className={cn(
-                  "flex-1 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-300",
-                  !isLogin ? "bg-white text-primary shadow-lg shadow-black/5" : "text-slate-400 hover:text-slate-600"
-                )}
-              >
-                Sign Up
-              </button>
-            </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={isLogin ? 'login' : 'signup'}
-                initial={{ opacity: 0, x: isLogin ? -10 : 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: isLogin ? 10 : -10 }}
-                transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
-              >
-                <div className="space-y-3 mb-10">
-                  <h2 className="text-3xl font-extrabold tracking-tighter text-slate-900 leading-tight">
-                    {isLogin ? 'Welcome back' : 'Create an account'}
-                  </h2>
-                  <p className="text-slate-500 font-medium text-sm leading-relaxed">
-                    {isLogin ? 'Enter your details to access your secure portfolio.' : 'Join the elite tier of financial management today.'}
-                  </p>
-                </div>
-
-                {/* Error Message */}
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="mb-8 p-5 rounded-2xl bg-red-50 border border-red-100 flex items-start gap-4"
-                  >
-                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                    <p className="text-sm text-red-700 font-bold leading-snug">{error}</p>
-                  </motion.div>
-                )}
-
-                <form onSubmit={isLogin ? handleLogin : handleSignup} className="space-y-8">
-                  <div className="space-y-6">
-                    {!isLogin && (
-                      <div className="space-y-2.5">
-                        <label className="block text-xs font-bold text-slate-700/60 uppercase tracking-widest ml-1">Full Name</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. John Doe"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          required={!isLogin}
-                          className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50/50 focus:bg-white text-slate-900 font-bold placeholder:text-slate-400 placeholder:opacity-40"
-                        />
-                      </div>
-                    )}
-                    <div className="space-y-2.5">
-                      <label className="block text-xs font-bold text-slate-700/60 uppercase tracking-widest ml-1">Email Address</label>
-                      <input
-                        type="email"
-                        placeholder="name@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50/50 focus:bg-white text-slate-900 font-bold placeholder:text-slate-400 placeholder:opacity-40"
-                      />
-                    </div>
-                    <div className="space-y-2.5 relative">
-                      <div className="flex justify-between items-center mb-1 ml-1">
-                        <label className="block text-xs font-bold text-slate-700/60 uppercase tracking-widest">Password</label>
-                        {isLogin && (
-                          <a href="#" className="text-[10px] text-primary uppercase font-bold tracking-widest hover:text-blue-700 transition-all">
-                            Forgot?
-                          </a>
-                        )}
-                      </div>
-                      <input
-                        type="password"
-                        placeholder="••••••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={mfaRequired}
-                        className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50/50 focus:bg-white text-slate-900 font-bold placeholder:text-slate-400 placeholder:opacity-40 disabled:opacity-50"
-                      />
-                      {!isLogin && <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 ml-1">Min. 12 characters</p>}
-                    </div>
-
-                    {isLogin && mfaRequired && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="space-y-4 pt-2"
-                      >
-                        <label className="block text-xs font-bold text-primary uppercase tracking-widest ml-1 flex items-center gap-2">
-                          <Shield size={14} /> Security Verification
-                        </label>
-                        <input
-                          type="text"
-                          maxLength={6}
-                          placeholder="000000"
-                          value={mfaCode}
-                          onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))}
-                          required
-                          autoFocus
-                          className="w-full text-center text-3xl font-extrabold tracking-[0.4em] py-5 rounded-2xl border-2 border-primary/20 focus:outline-none focus:ring-8 focus:ring-primary/5 transition-all bg-blue-50/30 text-primary"
-                        />
-                      </motion.div>
-                    )}
-                  </div>
-
-                  <div className="pt-2">
-                    <Button
-                      type="submit"
-                      isLoading={loading}
-                      size="lg"
-                      className="w-full rounded-2xl py-7"
-                    >
-                      {isLogin ? (mfaRequired ? 'Verify & Sign In' : 'Sign In') : 'Create Account'}
-                      <ArrowRight size={20} className="ml-2" />
-                    </Button>
-                  </div>
-                </form>
-
-                <div className="relative mt-12 mb-8">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-slate-100" />
-                  </div>
-                  <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-[0.2em]">
-                    <span className="bg-white px-6 text-slate-400">Secure Access</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => handleOAuth('google')}
-                    className="flex items-center justify-center gap-3 px-4 py-4 border border-slate-100 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all text-xs font-bold text-slate-600 uppercase tracking-widest"
-                  >
-                    <svg className="w-4 h-4" viewBox="0 0 24 24">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                    </svg>
-                    Google
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleOAuth('github')}
-                    className="flex items-center justify-center gap-3 px-4 py-4 border border-slate-100 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all text-xs font-bold text-slate-600 uppercase tracking-widest"
-                  >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                    </svg>
-                    GitHub
-                  </button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+        {/* Main Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="relative rounded-[2rem] bg-white shadow-2xl shadow-blue-900/10 border border-slate-100 w-full mx-auto"
+          style={{ padding: '3rem 2.5rem' }}
+        >
+          {/* Toggle Tabs */}
+          <div className="relative flex p-1.5 mb-10 bg-slate-100 rounded-xl border border-slate-200/50 shadow-inner">
+            <button
+              onClick={() => { setIsLogin(true); clearErrors(); }}
+              className={cn(
+                "relative flex-1 py-3.5 text-base font-semibold rounded-lg transition-all duration-300",
+                isLogin ? "text-slate-900" : "text-slate-500 hover:text-slate-700"
+              )}
+            >
+              {isLogin && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-white rounded-lg shadow-sm border border-slate-200/40"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">Log In</span>
+            </button>
+            <button
+              onClick={() => { setIsLogin(false); clearErrors(); }}
+              className={cn(
+                "relative flex-1 py-3.5 text-base font-semibold rounded-lg transition-all duration-300",
+                !isLogin ? "text-slate-900" : "text-slate-500 hover:text-slate-700"
+              )}
+            >
+              {!isLogin && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-white rounded-lg shadow-sm border border-slate-200/40"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">Sign Up</span>
+            </button>
           </div>
 
-          <p className="text-center mt-12 text-[10px] text-slate-400 font-bold uppercase tracking-[0.3em]">
-            Swiss-Engineered Financial Infrastructure
-          </p>
-        </div>
+          <motion.div layout className="relative">
+            <AnimatePresence mode="popLayout">
+              {error && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="mb-8 p-4 rounded-xl bg-red-50 border border-red-100 flex items-center gap-3 text-red-600 text-base font-medium shadow-sm"
+                >
+                  <Shield className="w-6 h-6 shrink-0" />
+                  <p>{error}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <form onSubmit={isLogin ? handleLogin : handleSignup} className="flex flex-col gap-4 relative z-10 w-full">
+              <AnimatePresence initial={false}>
+                {!isLogin && (
+                  <motion.div
+                    key="name-field"
+                    initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    animate={{ height: "auto", opacity: 1, overflow: "visible" }}
+                    exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    <div className="relative">
+                      <div className="absolute left-[1.15rem] top-1/2 -translate-y-1/2 pointer-events-none">
+                        <User className={cn("w-[26px] h-[26px] transition-colors duration-300", focusedInput === 'name' ? 'text-slate-800' : 'text-slate-400')} strokeWidth={2.5} />
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        onFocus={() => setFocusedInput('name')}
+                        onBlur={() => setFocusedInput(null)}
+                        required={!isLogin}
+                        style={{ paddingLeft: '3.75rem' }}
+                        className="w-full pr-4 py-5 rounded-2xl bg-[#f4f5f7] focus:bg-[#eceef1] focus:outline-none transition-all text-slate-900 placeholder:text-slate-500 font-semibold text-lg"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <motion.div layout="position" className="relative">
+                <div className="absolute left-[1.15rem] top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Mail className={cn("w-[26px] h-[26px] transition-colors duration-300", focusedInput === 'email' ? 'text-slate-800' : 'text-slate-400')} strokeWidth={2.5} />
+                </div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setFocusedInput('email')}
+                  onBlur={() => setFocusedInput(null)}
+                  required
+                  style={{ paddingLeft: '3.75rem' }}
+                  className="w-full pr-4 py-5 rounded-2xl bg-[#f4f5f7] focus:bg-[#eceef1] focus:outline-none transition-all text-slate-900 placeholder:text-slate-500 font-semibold text-lg"
+                />
+              </motion.div>
+
+              <motion.div layout="position" className="relative">
+                <div className="absolute left-[1.15rem] top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Lock className={cn("w-[26px] h-[26px] transition-colors duration-300", focusedInput === 'password' ? 'text-slate-800' : 'text-slate-400')} strokeWidth={2.5} />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setFocusedInput('password')}
+                  onBlur={() => setFocusedInput(null)}
+                  required
+                  disabled={mfaRequired}
+                  style={{ paddingLeft: '3.75rem', paddingRight: '3.75rem' }}
+                  className="w-full py-5 rounded-2xl bg-[#f4f5f7] focus:bg-[#eceef1] focus:outline-none transition-all text-slate-900 placeholder:text-slate-500 font-semibold text-lg disabled:opacity-50 disabled:bg-slate-100"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-[1.15rem] top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 focus:outline-none transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-[26px] h-[26px]" strokeWidth={2.5} /> : <Eye className="w-[26px] h-[26px]" strokeWidth={2.5} />}
+                </button>
+              </motion.div>
+
+              <AnimatePresence initial={false}>
+                {isLogin && (
+                  <motion.div
+                    key="forgot-pw"
+                    initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    animate={{ height: "auto", opacity: 1, overflow: "visible" }}
+                    exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    layout="position"
+                  >
+                    <div className="flex justify-end pt-1">
+                      <a href="#" className="text-[15px] text-slate-700 hover:text-slate-900 font-semibold transition-colors">
+                        Forgot password?
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence initial={false}>
+                {isLogin && mfaRequired && (
+                  <motion.div
+                    key="mfa"
+                    initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    animate={{ height: "auto", opacity: 1, overflow: "visible" }}
+                    exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    layout="position"
+                  >
+                    <div className="flex flex-col gap-2 pt-2">
+                      <input
+                        type="text"
+                        maxLength={6}
+                        placeholder="000 000"
+                        value={mfaCode}
+                        onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))}
+                        required
+                        autoFocus
+                        className="w-full text-center text-3xl tracking-[0.3em] py-5 rounded-2xl bg-[#f4f5f7] focus:bg-[#eceef1] focus:outline-none transition-all text-slate-900 placeholder:text-slate-300 font-bold"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <motion.div layout="position" className="pt-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full rounded-[22px] bg-[#111827] text-white font-bold text-[19px] py-[22px] transition-all duration-300 hover:bg-black hover:scale-[1.01] hover:shadow-xl hover:shadow-black/10 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    {loading ? (
+                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <motion.span
+                        key={isLogin ? 'login' : 'signup'}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        {isLogin ? (mfaRequired ? 'Verify & Enter' : 'Get Started') : 'Get Started'}
+                      </motion.span>
+                    )}
+                  </div>
+                </button>
+              </motion.div>
+            </form>
+          </motion.div>
+        </motion.div>
+
+        {/* Footer info */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="mt-10 flex items-center justify-center gap-2 text-slate-400 text-sm font-medium bg-slate-900/40 px-5 py-3 rounded-full backdrop-blur-md mx-auto w-fit border border-white/5 shadow-lg"
+        >
+          <Lock className="w-4 h-4 text-slate-400" />
+          <span>Secured by enterprise-grade encryption</span>
+        </motion.div>
       </div>
+
+      <style jsx global>{`
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </div>
   );
 }
