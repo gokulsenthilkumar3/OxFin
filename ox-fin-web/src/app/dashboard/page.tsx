@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -19,12 +21,12 @@ import {
 } from 'lucide-react';
 import TransferModal from '@/components/ui/TransferModal';
 
-const QuickAction = ({ icon: Icon, label, color }: { icon: any, label: string, color: string }) => (
+const QuickAction = ({ icon: Icon, label, colorClass }: { icon: any, label: string, colorClass: string }) => (
     <button className="flex flex-col items-center gap-2 group">
-        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${color} text-white shadow-lg shadow-blue-500/10 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl`}>
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${colorClass} text-white shadow-lg transition-all duration-300 group-hover:scale-110 border border-white/10`}>
             <Icon size={24} strokeWidth={2} />
         </div>
-        <span className="text-xs font-medium text-slate-600 group-hover:text-primary transition-colors">{label}</span>
+        <span className="text-xs font-medium text-white/60 group-hover:text-white transition-colors">{label}</span>
     </button>
 );
 
@@ -62,12 +64,16 @@ export default function Dashboard() {
     }, [session]);
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8 pb-32">
+        <div className="p-8 max-w-7xl mx-auto space-y-8 pb-32 relative z-10">
+            {/* Background Ambient Orbs for Dashboard */}
+            <div className="fixed top-[10%] left-[20%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] animate-orb pointer-events-none -z-10" />
+            <div className="fixed bottom-[10%] right-[10%] w-[30%] h-[30%] bg-indigo-600/10 rounded-full blur-[120px] animate-orb-delayed pointer-events-none -z-10" />
+            
             {/* Header Section with Search */}
             <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Overview</h1>
-                    <p className="text-slate-500 mt-1">Good morning, {session?.user?.name || 'Agent'}</p>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">Overview</h1>
+                    <p className="text-white/60 mt-1">Good morning, {session?.user?.name || 'Agent'}</p>
                 </div>
                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto">
                     {/* Search Bar */}
@@ -75,24 +81,21 @@ export default function Dashboard() {
                         <input
                             type="text"
                             placeholder="Search transactions..."
-                            className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50 focus:bg-white text-sm"
+                            className="w-full pl-10 pr-4 py-3 rounded-2xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all bg-white/5 focus:bg-white/10 text-sm text-white placeholder:text-white/30"
                         />
-                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <Button variant="ghost" className="bg-white border-2 border-slate-100 text-slate-600 h-12">
-                        <Download size={18} className="mr-2" />
-                        Export
-                    </Button>
-                    <Button
-                        variant="primary"
-                        className="shadow-xl shadow-blue-500/20 h-12"
+                    <button className="glass-button-secondary px-4 h-12 rounded-2xl flex items-center gap-2 text-sm font-semibold">
+                        <Download size={18} /> Export
+                    </button>
+                    <button
+                        className="glass-button px-5 h-12 rounded-2xl flex items-center gap-2 text-sm font-bold"
                         onClick={() => setIsTransferModalOpen(true)}
                     >
-                        <Zap size={18} className="mr-2" />
-                        New Transfer
-                    </Button>
+                        <Zap size={18} /> New Transfer
+                    </button>
                 </div>
             </header>
 
@@ -101,39 +104,43 @@ export default function Dashboard() {
                 {/* Left Column: Cards & Actions */}
                 <div className="lg:col-span-2 space-y-10">
                     {/* Smart Insight */}
-                    <div className="flex items-center gap-5 p-5 rounded-2xl bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-100/50 text-blue-900">
-                        <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center flex-shrink-0 shadow-sm border border-blue-100">
-                            <Zap size={22} className="text-blue-600" />
+                    <div className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 border border-blue-500/30 backdrop-blur-md">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center flex-shrink-0 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                            <Zap size={22} className="text-blue-400" />
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-blue-900">Smart Insight</p>
-                            <p className="text-sm text-blue-700/80 leading-relaxed">You spent <span className="font-extrabold">10% less</span> on groceries this week compared to last month. Keep it up!</p>
+                            <p className="text-sm font-bold text-white">Smart Insight</p>
+                            <p className="text-sm text-white/70 leading-relaxed mt-0.5">You spent <span className="text-white font-bold">10% less</span> on groceries this week compared to last month. Keep it up!</p>
                         </div>
                     </div>
 
                     {/* Quick Actions */}
                     <div className="flex items-center justify-between px-2 pt-2">
-                        <QuickAction icon={Send} label="Send" color="bg-blue-600" />
-                        <QuickAction icon={ArrowDownRight} label="Request" color="bg-emerald-500" />
-                        <QuickAction icon={FileText} label="Pay Bill" color="bg-purple-500" />
-                        <QuickAction icon={CreditCard} label="Cards" color="bg-slate-800" />
+                        <QuickAction icon={Send} label="Send" colorClass="bg-blue-600/80 shadow-blue-500/20" />
+                        <QuickAction icon={ArrowDownRight} label="Request" colorClass="bg-emerald-500/80 shadow-emerald-500/20" />
+                        <QuickAction icon={FileText} label="Pay Bill" colorClass="bg-purple-500/80 shadow-purple-500/20" />
+                        <QuickAction icon={CreditCard} label="Cards" colorClass="bg-white/10 shadow-white/5" />
                     </div>
 
                     {/* Charts Row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="card-swiss p-8">
                             <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-lg font-bold text-slate-900">Income vs Expense</h3>
-                                <button className="text-slate-400 hover:text-primary transition-colors"><MoreHorizontal size={20} /></button>
+                                <h3 className="text-lg font-bold text-white">Income vs Expense</h3>
+                                <button title="More options" aria-label="More options" className="text-white/40 hover:text-white transition-colors"><MoreHorizontal size={20} /></button>
                             </div>
-                            <TransactionTrendChart />
+                            <div className="opacity-90">
+                                <TransactionTrendChart />
+                            </div>
                         </div>
                         <div className="card-swiss p-8">
                             <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-lg font-bold text-slate-900">Spending</h3>
-                                <button className="text-slate-400 hover:text-primary transition-colors"><MoreHorizontal size={20} /></button>
+                                <h3 className="text-lg font-bold text-white">Spending</h3>
+                                <button title="More options" aria-label="More options" className="text-white/40 hover:text-white transition-colors"><MoreHorizontal size={20} /></button>
                             </div>
-                            <SpendingPieChart />
+                            <div className="opacity-90">
+                                <SpendingPieChart />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -142,7 +149,7 @@ export default function Dashboard() {
                 <div className="space-y-10">
                     {loading ? (
                         <div className="card-swiss p-8 h-[240px] flex items-center justify-center">
-                            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                            <Loader2 className="w-8 h-8 text-white/50 animate-spin" />
                         </div>
                     ) : (
                         <PhysicalCard
@@ -155,8 +162,8 @@ export default function Dashboard() {
                     {/* Recent Transactions List */}
                     <div className="card-swiss p-6">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-semibold text-slate-900">Recent Transactions</h3>
-                            <Link href="/transactions" className="text-sm text-primary font-medium hover:underline">View All</Link>
+                            <h3 className="font-semibold text-white">Recent Transactions</h3>
+                            <Link href="/transactions" className="text-sm text-white/60 font-medium hover:text-white transition-colors">View All</Link>
                         </div>
 
                         <div className="space-y-6">
@@ -177,45 +184,50 @@ export default function Dashboard() {
                                 transactions.map((txn, idx) => (
                                     <div key={txn.id} className="flex items-center justify-between group cursor-pointer">
                                         <div className="flex items-center gap-4">
-                                            <div className={`w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform`}>
+                                            <div className={`w-10 h-10 rounded-full bg-white/10 border border-white/5 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform text-white`}>
                                                 {txn.description.charAt(0)}
                                             </div>
                                             <div>
-                                                <p className="text-sm font-semibold text-slate-900">{txn.description}</p>
-                                                <p className="text-xs text-slate-400">{new Date(txn.created_at).toLocaleDateString()}</p>
+                                                <p className="text-sm font-semibold text-white">{txn.description}</p>
+                                                <p className="text-xs text-white/50">{new Date(txn.created_at).toLocaleDateString()}</p>
                                             </div>
                                         </div>
-                                        <span className={`text-sm font-semibold ${parseFloat(txn.amount) > 0 ? 'text-emerald-600' : 'text-slate-900'}`}>
+                                        <span className={`text-sm font-semibold ${parseFloat(txn.amount) > 0 ? 'text-emerald-400' : 'text-white'}`}>
                                             {parseFloat(txn.amount) > 0 ? '+' : ''}${Math.abs(parseFloat(txn.amount)).toFixed(2)}
                                         </span>
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-sm text-slate-400 text-center py-4">No transactions found.</p>
+                                <p className="text-sm text-white/40 text-center py-4">No transactions found.</p>
                             )}
                         </div>
                     </div>
 
                     {/* Mini Portfolio */}
-                    <div className="card-swiss p-6 bg-slate-900 text-white border-none">
-                        <div className="flex items-center justify-between mb-2">
-                            <p className="text-sm text-slate-400">Total Portfolio</p>
-                            <span className="text-emerald-400 text-xs font-medium flex items-center gap-1">
-                                <ArrowUpRight size={12} /> +12.5%
-                            </span>
-                        </div>
-                        <h3 className="text-2xl font-bold mb-6">
-                            {loading ? '...' : `$${(balanceData?.totalBalance || 0 + 114443).toLocaleString()}`}
-                        </h3>
-                        <div className="h-24">
-                            <PortfolioChart />
+                    <div className="card-swiss p-6 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 pointer-events-none" />
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-sm text-white/60">Total Portfolio</p>
+                                <span className="text-emerald-400 text-xs font-medium flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                                    <ArrowUpRight size={12} /> +12.5%
+                                </span>
+                            </div>
+                            <h3 className="text-3xl font-bold mb-6 text-white tracking-tight">
+                                {loading ? '...' : `$${(balanceData?.totalBalance || 0 + 114443).toLocaleString()}`}
+                            </h3>
+                            <div className="h-24 opacity-80">
+                                <PortfolioChart />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* AI Recommendations "For You" */}
-            <AIRecommendations />
+            <div className="opacity-90">
+                <AIRecommendations />
+            </div>
 
             {/* Transfer Modal */}
             <TransferModal
@@ -227,4 +239,3 @@ export default function Dashboard() {
         </div>
     );
 }
-

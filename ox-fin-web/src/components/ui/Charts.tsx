@@ -44,7 +44,17 @@ const mockTrendData = [
     { name: 'Sun', income: 349, expense: 430 },
 ];
 
-const COLORS = ['#2563EB', '#10B981', '#F59E0B', '#64748B']; // Trust Blue, Green, Amber, Slate
+const COLORS = ['#818CF8', '#34D399', '#FBBF24', '#94A3B8']; // Adjusted for dark theme
+
+// Tooltip style common
+const tooltipStyle = {
+    backgroundColor: 'rgba(20, 20, 20, 0.85)',
+    borderRadius: '12px',
+    border: '1px solid rgba(255,255,255,0.1)',
+    boxShadow: '0 4px 30px rgba(0,0,0,0.5)',
+    color: '#fff',
+    backdropFilter: 'blur(10px)'
+};
 
 // Area Chart - Clean
 export const PortfolioChart = () => (
@@ -52,18 +62,18 @@ export const PortfolioChart = () => (
         <AreaChart data={mockChartData}>
             <defs>
                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563EB" stopOpacity={0.15} />
-                    <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#818CF8" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#818CF8" stopOpacity={0} />
                 </linearGradient>
             </defs>
             <Tooltip
-                contentStyle={{ backgroundColor: '#fff', borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
-                itemStyle={{ color: '#1e293b' }}
+                contentStyle={tooltipStyle}
+                itemStyle={{ color: '#fff' }}
             />
             <Area
                 type="monotone"
                 dataKey="value"
-                stroke="#2563EB"
+                stroke="#818CF8"
                 strokeWidth={3}
                 fillOpacity={1}
                 fill="url(#colorValue)"
@@ -85,14 +95,15 @@ export const SpendingPieChart = () => (
                 paddingAngle={5}
                 dataKey="value"
                 cornerRadius={8}
-                stroke="none" // Remove border
+                stroke="rgba(0,0,0,0)" // Remove border
             >
                 {mockSpendingData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
             </Pie>
             <Tooltip
-                contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                contentStyle={tooltipStyle}
+                itemStyle={{ color: '#fff' }}
             />
         </PieChart>
     </ResponsiveContainer>
@@ -103,11 +114,12 @@ export const TransactionTrendChart = () => (
     <ResponsiveContainer width="100%" height={300}>
         <BarChart data={mockTrendData} barSize={32}>
             <Tooltip
-                cursor={{ fill: '#F1F5F9' }}
-                contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                contentStyle={tooltipStyle}
+                itemStyle={{ color: '#fff' }}
             />
-            <Bar dataKey="income" fill="#10B981" radius={[6, 6, 6, 6]} />
-            <Bar dataKey="expense" fill="#EF4444" radius={[6, 6, 6, 6]} opacity={0.8} />
+            <Bar dataKey="income" fill="#34D399" radius={[6, 6, 6, 6]} />
+            <Bar dataKey="expense" fill="#F87171" radius={[6, 6, 6, 6]} opacity={0.8} />
         </BarChart>
     </ResponsiveContainer>
 );

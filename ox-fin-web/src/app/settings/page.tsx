@@ -8,14 +8,14 @@ import ConsentCenter from '@/components/ui/ConsentCenter';
 import MFASetupModal from '@/components/ui/MFASetupModal';
 
 const SettingsCard = ({ title, description, icon: Icon, children }: any) => (
-    <div className="card-swiss p-6 space-y-6">
-        <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Icon size={20} className="text-primary" />
+    <div className="card-swiss p-8 space-y-6">
+        <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+            <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center">
+                <Icon size={24} className="text-white" />
             </div>
             <div>
-                <h3 className="font-semibold text-slate-900">{title}</h3>
-                <p className="text-sm text-slate-500">{description}</p>
+                <h3 className="text-lg font-bold text-white">{title}</h3>
+                <p className="text-sm text-white/50">{description}</p>
             </div>
         </div>
         {children}
@@ -25,15 +25,17 @@ const SettingsCard = ({ title, description, icon: Icon, children }: any) => (
 const ToggleSwitch = ({ enabled, onChange }: { enabled: boolean; onChange: () => void }) => (
     <button
         onClick={onChange}
+        title="Toggle Setting"
+        aria-label="Toggle Setting"
         className={cn(
-            "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-            enabled ? "bg-primary" : "bg-slate-200"
+            "relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 border border-white/10",
+            enabled ? "bg-white/20 shadow-[0_0_10px_rgba(255,255,255,0.2)]" : "bg-black/50"
         )}
     >
         <span
             className={cn(
-                "inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm",
-                enabled ? "translate-x-6" : "translate-x-1"
+                "inline-block h-4 w-4 transform rounded-full bg-white transition-all shadow-sm",
+                enabled ? "translate-x-6" : "translate-x-1 opacity-50"
             )}
         />
     </button>
@@ -72,20 +74,24 @@ export default function SettingsPage() {
         if (!twoFactorEnabled) {
             setIsMFAModalOpen(true);
         } else {
-            // Logic to disable MFA could be added here
-            // For now, we only allow enabling via the modal
+            // Logic to disable MFA
         }
     };
 
     return (
-        <div className="p-8 max-w-6xl mx-auto space-y-8 pb-24">
+        <div className="p-8 max-w-6xl mx-auto space-y-8 pb-32 relative z-10" suppressHydrationWarning>
+            {/* Background Ambient Orbs for Settings */}
+            <div className="fixed top-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[150px] animate-orb pointer-events-none -z-10" />
+            <div className="fixed bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[150px] animate-orb-delayed pointer-events-none -z-10" />
+
             {/* Header */}
-            <header>
-                <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Settings</h1>
-                <p className="text-slate-500 mt-1">Manage your account preferences and security</p>
+            <header className="mb-10">
+                <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-md">Settings</h1>
+                <p className="text-white/60 mt-2 font-medium">Manage your account preferences and security</p>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Profile & Account */}
                 <SettingsCard
                     title="Profile & Account"
                     description="Update your personal information"
@@ -93,33 +99,33 @@ export default function SettingsPage() {
                 >
                     <div className="space-y-6 pt-2">
                         <div>
-                            <label className="text-sm font-bold text-slate-700/60 mb-2 block uppercase tracking-wider">Full Name</label>
+                            <label className="text-[10px] font-bold text-white/40 mb-2 block uppercase tracking-[0.2em]">Full Name</label>
                             <input
                                 type="text"
-                                defaultValue="Agent Smith"
+                                defaultValue={session?.user?.name || "Agent Smith"}
                                 placeholder="Your full name"
-                                className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50 focus:bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:opacity-30"
+                                className="glass-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-white/20 transition-all text-sm"
                             />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-slate-700/60 mb-2 block uppercase tracking-wider">Email Address</label>
+                            <label className="text-[10px] font-bold text-white/40 mb-2 block uppercase tracking-[0.2em]">Email Address</label>
                             <input
                                 type="email"
-                                defaultValue="agent@oxfin.com"
+                                defaultValue={session?.user?.email || "agent@oxfin.com"}
                                 placeholder="name@example.com"
-                                className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50 focus:bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:opacity-30"
+                                className="glass-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-white/20 transition-all text-sm"
                             />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-slate-700/60 mb-2 block uppercase tracking-wider">Phone Number</label>
+                            <label className="text-[10px] font-bold text-white/40 mb-2 block uppercase tracking-[0.2em]">Phone Number</label>
                             <input
                                 type="tel"
                                 defaultValue="+1 (555) 123-4567"
                                 placeholder="+1 (000) 000-0000"
-                                className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all bg-slate-50 focus:bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:opacity-30"
+                                className="glass-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-white/20 transition-all text-sm"
                             />
                         </div>
-                        <button className="w-full bg-primary text-white py-3.5 rounded-2xl font-bold tracking-tight hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]">
+                        <button className="glass-button w-full py-3.5 rounded-xl font-bold tracking-wide mt-4">
                             Save Changes
                         </button>
                     </div>
@@ -131,13 +137,13 @@ export default function SettingsPage() {
                     description="Manage authentication and security settings"
                     icon={Shield}
                 >
-                    <div className="space-y-5">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Lock size={18} className="text-slate-400" />
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-white/5 rounded-lg"><Lock size={20} className="text-white" /></div>
                                 <div>
-                                    <p className="text-sm font-medium text-slate-900">Two-Factor Authentication</p>
-                                    <p className="text-xs text-slate-500">Add an extra layer of security</p>
+                                    <p className="text-sm font-bold text-white">Two-Factor Authentication</p>
+                                    <p className="text-xs text-white/50 mt-1">Add an extra layer of security</p>
                                 </div>
                             </div>
                             <ToggleSwitch
@@ -145,18 +151,20 @@ export default function SettingsPage() {
                                 onChange={handleMFAToggle}
                             />
                         </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Shield size={18} className="text-slate-400" />
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-white/5 rounded-lg"><Shield size={20} className="text-white" /></div>
                                 <div>
-                                    <p className="text-sm font-medium text-slate-900">Biometric Login</p>
-                                    <p className="text-xs text-slate-500">Use Face ID or Touch ID</p>
+                                    <p className="text-sm font-bold text-white">Biometric Login</p>
+                                    <p className="text-xs text-white/50 mt-1">Use Face ID or Touch ID</p>
                                 </div>
                             </div>
                             <ToggleSwitch enabled={biometricsEnabled} onChange={() => setBiometricsEnabled(!biometricsEnabled)} />
                         </div>
-                        <div className="pt-4 border-t border-slate-100">
-                            <button className="text-sm text-primary font-medium hover:underline">Change Password</button>
+                        <div className="pt-2">
+                            <button className="text-sm text-white/70 font-semibold hover:text-white transition-colors underline underline-offset-4 decoration-white/30 hover:decoration-white">
+                                Change Password
+                            </button>
                         </div>
                     </div>
                 </SettingsCard>
@@ -172,24 +180,24 @@ export default function SettingsPage() {
                             { name: 'Chase Bank', account: '****1234', status: 'Connected' },
                             { name: 'Wells Fargo', account: '****5678', status: 'Connected' },
                         ].map((bank, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
-                                        <CreditCard size={18} className="text-slate-600" />
+                            <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shadow-inner">
+                                        <CreditCard size={20} className="text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-medium text-slate-900">{bank.name}</p>
-                                        <p className="text-xs text-slate-500">{bank.account}</p>
+                                        <p className="text-sm font-bold text-white tracking-wide">{bank.name}</p>
+                                        <p className="text-[10px] text-white/50 tracking-widest mt-0.5">{bank.account}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs text-emerald-600 font-medium flex items-center gap-1">
-                                        <Check size={14} /> {bank.status}
+                                    <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20">
+                                        <Check size={12} strokeWidth={3} /> {bank.status}
                                     </span>
                                 </div>
                             </div>
                         ))}
-                        <button className="w-full py-2.5 rounded-xl border-2 border-dashed border-slate-200 text-slate-600 font-medium hover:border-primary hover:text-primary transition-colors">
+                        <button className="w-full py-3.5 rounded-xl border-2 border-dashed border-white/20 text-white/60 font-bold tracking-wide hover:border-white/50 hover:text-white hover:bg-white/5 transition-all mt-2">
                             + Add New Account
                         </button>
                     </div>
@@ -201,33 +209,33 @@ export default function SettingsPage() {
                     description="Control how you receive updates"
                     icon={Bell}
                 >
-                    <div className="space-y-5">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Mail size={18} className="text-slate-400" />
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-white/5 rounded-lg"><Mail size={20} className="text-white" /></div>
                                 <div>
-                                    <p className="text-sm font-medium text-slate-900">Email Notifications</p>
-                                    <p className="text-xs text-slate-500">Transaction alerts and updates</p>
+                                    <p className="text-sm font-bold text-white">Email Notifications</p>
+                                    <p className="text-xs text-white/50 mt-1">Transaction alerts and updates</p>
                                 </div>
                             </div>
                             <ToggleSwitch enabled={emailNotifs} onChange={() => setEmailNotifs(!emailNotifs)} />
                         </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Bell size={18} className="text-slate-400" />
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-white/5 rounded-lg"><Bell size={20} className="text-white" /></div>
                                 <div>
-                                    <p className="text-sm font-medium text-slate-900">Push Notifications</p>
-                                    <p className="text-xs text-slate-500">Real-time mobile alerts</p>
+                                    <p className="text-sm font-bold text-white">Push Notifications</p>
+                                    <p className="text-xs text-white/50 mt-1">Real-time mobile alerts</p>
                                 </div>
                             </div>
                             <ToggleSwitch enabled={pushNotifs} onChange={() => setPushNotifs(!pushNotifs)} />
                         </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Globe size={18} className="text-slate-400" />
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-white/5 rounded-lg"><Globe size={20} className="text-white" /></div>
                                 <div>
-                                    <p className="text-sm font-medium text-slate-900">Marketing Communications</p>
-                                    <p className="text-xs text-slate-500">Product updates and offers</p>
+                                    <p className="text-sm font-bold text-white">Marketing</p>
+                                    <p className="text-xs text-white/50 mt-1">Product updates and offers</p>
                                 </div>
                             </div>
                             <ToggleSwitch enabled={false} onChange={() => { }} />
@@ -237,7 +245,7 @@ export default function SettingsPage() {
             </div>
 
             {/* Consent Center - Full Width */}
-            <div>
+            <div className="mt-8">
                 <ConsentCenter />
             </div>
 

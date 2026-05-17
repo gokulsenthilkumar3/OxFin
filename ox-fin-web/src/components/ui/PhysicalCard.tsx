@@ -19,7 +19,7 @@ export default function PhysicalCard({
     cardNumber = '•••• •••• •••• 1234',
     cardHolder = 'John Doe',
     expiry = '12/28',
-    variant = 'primary',
+    variant = 'glass', // Defaulting to glass for the new aesthetic
     className
 }: PhysicalCardProps) {
     return (
@@ -27,44 +27,47 @@ export default function PhysicalCard({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className={cn(
-                "card-physical w-full aspect-[1.586] p-8 flex flex-col justify-between select-none shadow-2xl hover:shadow-blue-500/10 transition-all duration-500",
-                variant === 'primary' && "bg-gradient-to-br from-blue-600 to-indigo-700",
-                variant === 'dark' && "bg-slate-900",
-                variant === 'glass' && "bg-white/10 backdrop-blur-md border border-white/20 text-foreground", // Adjust text for glass lighter bg if needed
+                "w-full aspect-[1.586] p-8 flex flex-col justify-between select-none shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_rgba(255,255,255,0.05)] transition-all duration-500 relative overflow-hidden rounded-3xl",
+                variant === 'primary' && "bg-gradient-to-br from-blue-600/80 to-indigo-700/80 backdrop-blur-xl border border-white/20 text-white",
+                variant === 'dark' && "bg-black/60 backdrop-blur-xl border border-white/10 text-white",
+                variant === 'glass' && "bg-white/5 backdrop-blur-3xl border border-white/20 text-white",
                 className
             )}
         >
-            {/* Magnetic Strip / Chip Mockup visually */}
-            <div className="flex justify-between items-start">
-                <div className="w-12 h-8 rounded bg-yellow-400/20 border border-yellow-400/40 relative overflow-hidden backdrop-blur-sm">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/30" />
+            {/* Subtle Noise Texture Overlay */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay noise-texture" />
+            
+            {/* Glossy Highlights */}
+            <div className="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] bg-gradient-to-br from-white/10 via-transparent to-transparent rotate-45 pointer-events-none" />
+            
+            {/* Magnetic Strip / Chip Mockup */}
+            <div className="flex justify-between items-start relative z-10">
+                <div className="w-12 h-8 rounded bg-yellow-500/30 border border-yellow-400/50 relative overflow-hidden backdrop-blur-md shadow-inner">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/40" />
                 </div>
-                <div className="text-xl font-bold tracking-widest italic opacity-80">Ox</div>
+                <div className="text-2xl font-bold tracking-widest italic opacity-90 drop-shadow-md">Ox</div>
             </div>
 
             {/* Content */}
-            <div className="space-y-6">
+            <div className="space-y-6 relative z-10">
                 <div>
-                    <p className="text-xs font-medium opacity-70 mb-1 uppercase tracking-wider">Current Balance</p>
-                    <h3 className="text-3xl font-bold tracking-tight">
+                    <p className="text-[10px] font-bold opacity-60 mb-1 uppercase tracking-[0.2em]">Current Balance</p>
+                    <h3 className="text-4xl font-extrabold tracking-tight drop-shadow-md">
                         {currency}{balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </h3>
                 </div>
 
                 <div className="flex justify-between items-end">
                     <div className="space-y-1">
-                        <p className="text-[10px] uppercase opacity-60 tracking-widest">Card Holder</p>
-                        <p className="font-medium tracking-wide text-sm">{cardHolder}</p>
+                        <p className="text-[9px] uppercase opacity-60 tracking-[0.2em] font-bold">Card Holder</p>
+                        <p className="font-semibold tracking-widest text-sm uppercase drop-shadow-md">{cardHolder}</p>
                     </div>
                     <div className="space-y-1 text-right">
-                        <p className="text-[10px] uppercase opacity-60 tracking-widest">Expires</p>
-                        <p className="font-medium tracking-wide text-sm">{expiry}</p>
+                        <p className="text-[9px] uppercase opacity-60 tracking-[0.2em] font-bold">Expires</p>
+                        <p className="font-semibold tracking-widest text-sm drop-shadow-md">{expiry}</p>
                     </div>
                 </div>
             </div>
-
-            {/* Glossy overlay effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
         </motion.div>
     );
 }

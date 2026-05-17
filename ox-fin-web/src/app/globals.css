@@ -1,222 +1,128 @@
-/* OxFine Elite Design System - Phase 13 Refinement */
+@import "tailwindcss";
+
 :root {
-  /* HSL Palette for better harmony and programmatic manipulation */
-  --hue-primary: 221;
-  --hue-success: 142;
-  --hue-error: 0;
-
-  --background: hsl(var(--hue-primary), 33%, 98%);
-  /* #F8FAFC */
-  --foreground: hsl(var(--hue-primary), 50%, 10%);
-  /* #0f172a */
-  --surface: hsl(0, 0%, 100%);
-
-  --primary: hsl(var(--hue-primary), 83%, 53%);
-  /* #2563EB */
-  --success: hsl(var(--hue-success), 70%, 45%);
-  /* #10B981 */
-  --error: hsl(var(--hue-error), 84%, 60%);
-  /* #EF4444 */
-
-  --muted: hsl(var(--hue-primary), 20%, 96%);
-  /* #f1f5f9 */
-  --muted-foreground: hsl(var(--hue-primary), 15%, 45%);
-  /* #64748b */
-  --border: hsla(var(--hue-primary), 20%, 90%, 0.6);
-
-  /* Baseline Grid Constants */
-  --grid-unit: 4px;
-  --space-1: calc(var(--grid-unit) * 1);
-  /* 4px */
-  --space-2: calc(var(--grid-unit) * 2);
-  /* 8px */
-  --space-4: calc(var(--grid-unit) * 4);
-  /* 16px */
-  --space-8: calc(var(--grid-unit) * 8);
-  /* 32px */
-}
-
-.light {
-  --background: hsl(210, 40%, 98%);
-  --foreground: hsl(222, 47%, 11%);
-  --surface: #ffffff;
-  --primary: hsl(221, 83%, 53%);
-  --border: hsla(214, 32%, 91%, 0.6);
-}
-
-.dark {
-  --background: hsl(222, 47%, 11%);
-  --foreground: hsl(210, 40%, 98%);
-  --surface: hsl(222, 47%, 15%);
-  --primary: hsl(217, 91%, 60%);
-  --border: hsla(217, 32%, 20%, 0.6);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-success: var(--success);
-  --color-error: var(--error);
-  --spacing-8: var(--space-2);
-  --spacing-16: var(--space-4);
-  --spacing-32: var(--space-8);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #ffffff;
+  --muted: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  /* Standardized for readability */
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
 
-/* Elite Typography Hierarchy */
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  /* Tighter headers for premium feel */
-  color: var(--foreground);
+/* stylelint-disable-next-line unknown-at-rule */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
 }
 
-/* Refined Glassmorphism - Phase 13 Audit */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.glass-button-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.glass-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes orb-float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.animate-orb {
+  animation: orb-float 20s infinite ease-in-out;
+}
+
+.animate-orb-delayed {
+  animation: orb-float 25s infinite ease-in-out reverse;
+}
+
+/* Base card for existing components that rely on it */
 .card-swiss {
-  background: hsla(0, 0%, 100%, 0.85);
-  backdrop-filter: blur(12px);
-  /* Standardized to 12px for better depth */
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1.5rem;
-  /* Smoother radius */
-  border: 1px solid hsla(var(--hue-primary), 20%, 90%, 0.4);
-  /* Consistent 0.4 opacity border */
-  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
-  /* Softer shadow */
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .card-swiss:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.glass-effect {
-  background: hsla(0, 0%, 100%, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid hsla(0, 0%, 100%, 0.3);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
-}
-
-/* Physical Card - Enhanced Texture */
-.card-physical {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"),
-    linear-gradient(145deg, hsl(var(--hue-primary), 50%, 15%) 0%, hsl(var(--hue-primary), 60%, 8%) 100%);
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.5rem;
-  color: white;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.text-balance-lg {
-  font-size: 2.25rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  color: white;
-}
-
-/* Navigation Item */
-.nav-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 0.625rem 0.75rem;
-  border-radius: 0.75rem;
-  color: var(--muted-foreground);
-  transition: all 0.2s;
-}
-
-@media (min-width: 1024px) {
-  .nav-item {
-    justify-content: flex-start;
-  }
-}
-
-.nav-item:hover {
-  color: var(--foreground);
-  background-color: #f8fafc;
-}
-
-.nav-item.active {
-  color: var(--primary);
-  background-color: #eff6ff;
-  font-weight: 500;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-}
-
-/* Skeleton & Shimmer - Phase 15 Loading Polish */
 .skeleton {
-  background: linear-gradient(90deg,
-      var(--muted) 25%,
-      hsl(var(--hue-primary), 20%, 93%) 50%,
-      var(--muted) 75%);
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
   border-radius: 0.75rem;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
-/* Tracking utility */
-.tracking-tight {
-  letter-spacing: -0.025em;
+.nav-item {
+  color: rgba(255, 255, 255, 0.5);
+}
+.nav-item:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.nav-item.active {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 500;
 }
 
-.tracking-tighter {
-  letter-spacing: -0.05em;
-}
-
-/* Desktop-only hover for cards - standardizing */
-@media (hover: hover) {
-  .hover-elevate {
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .hover-elevate:hover {
-    transform: translateY(-4px);
-  }
-}
-
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
+.noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
